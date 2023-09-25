@@ -359,7 +359,7 @@ void TSOServer::enterLeaderElection()
 }
 
 bool TSOServer::getIsLeaderFromTSOService() const
-{ 
+{
     return tso_service->getIsLeader();
 }
 
@@ -552,16 +552,6 @@ int TSOServer::main(const std::vector<std::string> &)
     //     /* already_loaded = */ false);  /// Reload it right now (initial loading)
 
     std::unique_ptr<HTTPServer> http_server;
-    std::vector<std::string> listen_hosts = DB::getMultipleValuesFromConfig(config(), "", "listen_host");
-
-    bool listen_try = config().getBool("listen_try", false);
-    if (listen_hosts.empty())
-    {
-        listen_hosts.emplace_back("::1");
-        listen_hosts.emplace_back("127.0.0.1");
-        listen_try = true;
-    }
-
 
     Poco::Net::HTTPServerParams::Ptr http_params = new Poco::Net::HTTPServerParams;
     Poco::Timespan keep_alive_timeout(config().getUInt("tso_service.http.keep_alive_timeout", 10), 0);
@@ -598,7 +588,7 @@ int TSOServer::main(const std::vector<std::string> &)
                 }
             }
         };
-        
+
         create_server("tso_service.http.port", [&](UInt16 port)
         {
 
@@ -614,7 +604,7 @@ int TSOServer::main(const std::vector<std::string> &)
             handler->attachStrictPath(config().getString("prometheus.endpoint", "/metrics"));
             handler->allowGetAndHeadRequest();
             factory->addHandler(handler);
-            
+
             http_server = std::make_unique<HTTPServer>(
                 global_context,
                 factory,
@@ -661,7 +651,7 @@ int TSOServer::main(const std::vector<std::string> &)
             LOG_INFO(log, "Closed connections to Keeper. But {} remain. Probably some users cannot finish their connections after context shutdown.", current_connections);
         else
             LOG_INFO(log, "Closed connections to Keeper.");
-        
+
         if (http_server)
         {
             http_server->stop();
