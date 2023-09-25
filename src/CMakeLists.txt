@@ -404,6 +404,7 @@ target_link_libraries(clickhouse_common_io
             ${LIBNUMA_LIBRARY}
             ipdb
             maxminddb
+            libmetrics2
         PRIVATE
             ${UDNS_LIBRARIES}
 
