@@ -137,6 +137,7 @@ def parse_env_variables(
     result.append(f"CXX={cxx}")
     cmake_flags.append(f"-DCMAKE_C_COMPILER={cc}")
     cmake_flags.append(f"-DCMAKE_CXX_COMPILER={cxx}")
+    cmake_flags.append(f"-DENABLE_CHECK_HEAVY_BUILDS=0")
 
     if build_type:
         result.append(f"BUILD_TYPE={build_type.capitalize()}")
@@ -191,7 +192,7 @@ if __name__ == "__main__":
         help="ClickHouse git repository",
     )
     parser.add_argument("--output-dir", type=dir_name, required=True)
-    parser.add_argument("--build-type", choices=("debug", ""), default="")
+    parser.add_argument("--build-type", choices=("debug", "release"), default="")
     parser.add_argument(
         "--ccache_dir",
         default=os.getenv("HOME", "") + "/.ccache",
